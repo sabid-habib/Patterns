@@ -2,26 +2,29 @@ public class ChainDemo {
 
     private static AbstractChecker getChainOfCheckers(){
 
-        AbstractChecker errorLogger = new FirstHalfChecker(AbstractLogger.ERROR);
-        AbstractChecker fileLogger = new FirstQuarterChecker(AbstractLogger.DEBUG);
-        AbstractChecker consoleLogger = new ThirdQuarterChecker(AbstractLogger.INFO);
+        AbstractChecker firstHalf = new FirstHalfChecker();
+        AbstractChecker firstQuarter = new FirstQuarterChecker();
+        AbstractChecker thirdQuarter = new ThirdQuarterChecker();
 
-        errorLogger.setNextLogger(fileLogger);
-        fileLogger.setNextLogger(consoleLogger);
+        firstQuarter.setNextChecker(firstHalf);
+        firstHalf.setNextChecker(thirdQuarter);
 
-        return errorLogger;
+        return firstQuarter;
     }
 
     public static void main(String[] args) {
         AbstractChecker checkerChain = getChainOfCheckers();
 
-        checkerChain.logMessage(AbstractLogger.INFO,
-                "This is an information.");
+        System.out.println("Checking 71");
+        checkerChain.check(71);
 
-        checkerChain.logMessage(AbstractLogger.DEBUG,
-                "This is an debug level information.");
+        System.out.println("Checking 21");
+        checkerChain.check(21);
 
-        checkerChain.logMessage(AbstractLogger.ERROR,
-                "This is an error information.");
+        System.out.println("Checking 41");
+        checkerChain.check(41);
+
+        System.out.println("Checking 91");
+        checkerChain.check(91);
     }
 }
